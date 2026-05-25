@@ -19,6 +19,7 @@ public class Game1 : Game
     int offsetX;
     int offsetY;
 
+
     Tile [,] grid;
     Random random = new();
 
@@ -112,10 +113,10 @@ public class Game1 : Game
                 _spriteBatch.Draw(pixel, tile.Bounds, Color.Red);
 
                 int pad = 4;
-                _spriteBatch.Draw(pixel, new Rectangle(tile.Bounds.X + pad, tile.Bounds.Y + pad, tile.Bounds.Width - pad * 2, 4), Color.Black);
-                _spriteBatch.Draw(pixel, new Rectangle(tile.Bounds.X + pad, tile.Bounds.Y + tile.Bounds.Height - pad - 4, tile.Bounds.Width - pad * 2, 4), Color.Black);
-                _spriteBatch.Draw(pixel, new Rectangle(tile.Bounds.X + pad, tile.Bounds.Y + pad, 4, tile.Bounds.Height - pad * 2), Color.Black);
-                _spriteBatch.Draw(pixel, new Rectangle(tile.Bounds.X + tile.Bounds.Width - pad - 4, tile.Bounds.Y + pad, 4, tile.Bounds.Height - pad * 2), Color.Black);
+                float DetectorDiagonal = MathF.Sqrt(2) * (tile.Bounds.Width - pad * 2);
+
+                _spriteBatch.Draw(pixel, new Vector2(tile.Bounds.X + tile.Bounds.Width/ 2f, tile.Bounds.Y + tile.Bounds.Height/ 2f), null, Color.Black, MathHelper.ToRadians(45), new Vector2(0.5f, 0.5f), new Vector2(DetectorDiagonal, 4), SpriteEffects.None, 0f);
+                _spriteBatch.Draw(pixel, new Vector2(tile.Bounds.X + tile.Bounds.Width / 2f, tile.Bounds.Y + tile.Bounds.Height/ 2f), null, Color.Black, MathHelper.ToRadians(-45), new Vector2(0.5f, 0.5f), new Vector2(DetectorDiagonal, 4), SpriteEffects.None, 0f);
             }
             else if (tile.IsRevealed)
             {
