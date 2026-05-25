@@ -295,25 +295,24 @@
     ]
   },
   "packageFolders": {
-    "/home/yolanda/.nuget/packages/": {}
+    "C:\\Users\\josey\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/BuscaminasCS.csproj",
+      "projectUniqueName": "C:\\Users\\josey\\OneDrive\\Imágenes\\CosasProgramación\\C Sharp\\BuscaminasCS\\BuscaminasCS.csproj",
       "projectName": "BuscaminasCS",
-      "projectPath": "/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/BuscaminasCS.csproj",
-      "packagesPath": "/home/yolanda/.nuget/packages/",
-      "outputPath": "/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/obj/",
+      "projectPath": "C:\\Users\\josey\\OneDrive\\Imágenes\\CosasProgramación\\C Sharp\\BuscaminasCS\\BuscaminasCS.csproj",
+      "packagesPath": "C:\\Users\\josey\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\josey\\OneDrive\\Imágenes\\CosasProgramación\\C Sharp\\BuscaminasCS\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/yolanda/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\josey\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
-        "/usr/lib/dotnet/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -332,7 +331,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "10.0.100"
+      "SdkAnalysisLevel": "10.0.200"
     },
     "frameworks": {
       "net9.0": {
@@ -364,11 +363,15 @@
             "version": "[9.0.15, 9.0.15]"
           },
           {
-            "name": "Microsoft.NETCore.App.Host.linux-x64",
+            "name": "Microsoft.NETCore.App.Host.win-x64",
             "version": "[9.0.15, 9.0.15]"
           },
           {
             "name": "Microsoft.NETCore.App.Ref",
+            "version": "[9.0.15, 9.0.15]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
             "version": "[9.0.15, 9.0.15]"
           }
         ],
@@ -377,7 +380,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.107/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
