@@ -50,8 +50,8 @@ public class Game1 : Game
             for (int x = 0; x < colm; x++)
                 grid[y, x] = new Tile { Bounds = new Rectangle(offsetX + x * tileSize, offsetY + y * tileSize, tileSize, tileSize) };
 
-        int minesPlaced = 0;
-        while (minesPlaced < 10)
+              int minesPlaced = 0;
+                  while (minesPlaced < 10)
         {
             int rx = random.Next(colm);
             int ry = random.Next(row);
@@ -82,17 +82,15 @@ public class Game1 : Game
 
         if (mouse.LeftButton == ButtonState.Pressed)
         {
-            Point mousePos = new Point(mouse.X, mouse.Y);
+           int x = (mouse.X - offsetX) / tileSize;
+           int y = (mouse.Y - offsetY) / tileSize;
 
-            for (int y = 0; y < row; y++)
+           if(x >= 0 && x < row && y >= 0 && y < colm)
             {
-                for (int x = 0; x < colm; x++)
+                Tile tile = grid[y, x];
+                if (!tile.IsRevealed)
                 {
-                    Tile tile = grid[y, x];
-                    if (tile.Bounds.Contains(mousePos) && !tile.IsRevealed)
-                    {
-                        tile.IsRevealed = true;
-                    }
+                    tile.IsRevealed = true;
                 }
             }
         }
@@ -112,8 +110,7 @@ public class Game1 : Game
             {
                 _spriteBatch.Draw(pixel, tile.Bounds, Color.Red);
 
-                int pad = 4;
-                float DetectorDiagonal = MathF.Sqrt(2) * (tile.Bounds.Width - pad * 2);
+                float DetectorDiagonal = MathF.Sqrt(2) * (tile.Bounds.Width - 4 * 2);
 
                 _spriteBatch.Draw(pixel, new Vector2(tile.Bounds.X + tile.Bounds.Width/ 2f, tile.Bounds.Y + tile.Bounds.Height/ 2f), null, Color.Black, MathHelper.ToRadians(45), new Vector2(0.5f, 0.5f), new Vector2(DetectorDiagonal, 4), SpriteEffects.None, 0f);
                 _spriteBatch.Draw(pixel, new Vector2(tile.Bounds.X + tile.Bounds.Width / 2f, tile.Bounds.Y + tile.Bounds.Height/ 2f), null, Color.Black, MathHelper.ToRadians(-45), new Vector2(0.5f, 0.5f), new Vector2(DetectorDiagonal, 4), SpriteEffects.None, 0f);
