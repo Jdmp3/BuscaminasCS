@@ -4,7 +4,7 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/josey/OneDrive/Imágenes/CosasProgramación/C Sharp/BuscaminasCS/Content/YahaUsagi.png</File>
+    <File>/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/Content/YahaUsagi.png</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />
