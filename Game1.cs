@@ -11,6 +11,11 @@ public class Game1 : Game
     private SpriteBatch _spriteBatch;
 
     Texture2D pixel;
+    Texture2D bgSprite;
+    int totalFrames = 5;
+    int currentFrame = 0;
+    float frameTimer = 0f;
+    float frameDuration = 0.6f;
 
     int row = 10;
     int colm = 10;
@@ -26,6 +31,9 @@ public class Game1 : Game
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
+        _graphics.PreferredBackBufferWidth = 1280;
+        _graphics.PreferredBackBufferHeight = 720;
+        _graphics.ApplyChanges();
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
     }
@@ -71,6 +79,8 @@ public class Game1 : Game
 
         pixel = new Texture2D(GraphicsDevice, 1, 1);
         pixel.SetData(new[] {Color.White});
+
+        bgSprite = Content.Load<Texture2D>("SpaceWallpaperSheet");
     }
 
     protected override void Update(GameTime gameTime)
@@ -95,14 +105,24 @@ public class Game1 : Game
             }
         }
 
+        frameTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+        if (frameTimer >= frameDuration)
+        {
+            currentFrame = (currentFrame + 1) % totalFrames;
+            frameTimer -= frameDuration;
+        }
+
         base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.Beige);
+        GraphicsDevice.Clear(Color.Black);
 
         _spriteBatch.Begin();
+
+        Rectangle sourceRect = new Rectangle(currentFrame * 1280, 0, 1280, 720);
+        _spriteBatch.Draw(bgSprite, new Rectangle(0, 0, 1280, 720), sourceRect, Color.White);
 
         foreach (Tile tile in grid)
         {
