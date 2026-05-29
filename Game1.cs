@@ -24,6 +24,8 @@ public class Game1 : Game
     int offsetX;
     int offsetY;
 
+    MouseState _previousMouse;
+    Rectangle _pressedBounds = Rectangle.Empty;
 
     Tile [,] grid;
     Random random = new();
@@ -90,20 +92,36 @@ public class Game1 : Game
 
         MouseState mouse = Mouse.GetState();
 
-        if (mouse.LeftButton == ButtonState.Pressed)
+        if (mouse.LeftButton == ButtonState.Pressed && _previousMouse.LeftButton == ButtonState.Released)
         {
-           int x = (mouse.X - offsetX) / tileSize;
-           int y = (mouse.Y - offsetY) / tileSize;
-
-           if(x >= 0 && x < row && y >= 0 && y < colm)
+            int x = (mouse.X - offsetX) / tileSize;
+            int y = (mouse.Y - offsetY) / tileSize;
+            if (x >= 0 && x < colm && y >= 0 && y < row)
             {
-                Tile tile = grid[y, x];
-                if (!tile.IsRevealed)
-                {
-                    tile.IsRevealed = true;
-                }
+                _pressedBounds = grid[y, x].Bounds;
             }
         }
+
+        if (_pressedBounds != Rectangle.Empty && mouse.LeftButton == ButtonState.Pressed)
+        {
+            if (!_pressedBounds.Contains(mouse.X, mouse.Y))
+            {
+                _pressedBounds = Rectangle.Empty;
+            }
+        }
+
+        if (mouse.LeftButton == ButtonState.Released && _previousMouse.LeftButton == ButtonState.Pressed)
+        {
+            if (_pressedBounds != Rectangle.Empty && _pressedBounds.Contains(mouse.X, mouse.Y))
+            {
+                int x = (_pressedBounds.X - offsetX) / tileSize;
+                int y = (_pressedBounds.Y - offsetY) / tileSize;
+                grid[y, x].IsRevealed = true;
+            }
+            _pressedBounds = Rectangle.Empty;
+        }
+
+        _previousMouse = mouse;
 
         frameTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
         if (frameTimer >= frameDuration)
@@ -141,14 +159,11 @@ public class Game1 : Game
             }
             else
             {
-                _spriteBatch.Draw(pixel, tile.Bounds, Color.DarkGray);
+                if (tile.Bounds == _pressedBounds)
+                    _spriteBatch.Draw(pixel, tile.Bounds, Color.Gray);
+                else
+                    _spriteBatch.Draw(pixel, tile.Bounds, Color.DarkGray);
             }
-
-            _spriteBatch.Draw(
-                pixel,
-                new Rectangle(tile.Bounds.X, tile.Bounds.Y, tile.Bounds.Width, 2),
-                Color.Magenta
-            );
         }
 
         for (int x = 0; x <= colm; x++)
