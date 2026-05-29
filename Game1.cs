@@ -2,11 +2,13 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Security.Principal;
 
 namespace BuscaminasCS;
 
 public class Game1 : Game
 {
+
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
 
@@ -25,6 +27,8 @@ public class Game1 : Game
     int offsetY;
 
     MouseState _previousMouse;
+
+    KeyboardState _previousKeyboard;
     Rectangle _pressedBounds = Rectangle.Empty;
 
     Tile [,] grid;
@@ -38,6 +42,7 @@ public class Game1 : Game
         _graphics.ApplyChanges();
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
+        Window.ClientSizeChanged += OnWindowSizeChanged;
     }
 
     public class Tile()
@@ -85,12 +90,39 @@ public class Game1 : Game
         bgSprite = Content.Load<Texture2D>("SpaceWallpaperSheet");
     }
 
+
+    private void OnWindowSizeChanged(Object sender, EventArgs e)
+    {
+        offsetX = (GraphicsDevice.Viewport.Width - colm * tileSize) / 2;
+        offsetY = (GraphicsDevice.Viewport.Height - row * tileSize) / 2;
+        for(int y = 0; y < row; y++)
+        {
+            for(int x = 0; x < row; x++){
+            grid[y, x].Bounds = new Rectangle(offsetX + x * tileSize, offsetY + y * tileSize, tileSize, tileSize);
+            }
+        }
+    }
+
+
     protected override void Update(GameTime gameTime)
     {
+        KeyboardState keyboard = Keyboard.GetState();
+
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
+        if (keyboard.IsKeyDown(Keys.F11) && _previousKeyboard.IsKeyUp(Keys.F11))
+        {
+            _graphics.ToggleFullScreen();
+            
+        }
+
+
+
         MouseState mouse = Mouse.GetState();
+
+
+
 
         if (mouse.LeftButton == ButtonState.Pressed && _previousMouse.LeftButton == ButtonState.Released)
         {
@@ -130,6 +162,8 @@ public class Game1 : Game
             frameTimer -= frameDuration;
         }
 
+        _previousKeyboard = keyboard;
+
         base.Update(gameTime);
     }
 
@@ -140,7 +174,7 @@ public class Game1 : Game
         _spriteBatch.Begin();
 
         Rectangle sourceRect = new Rectangle(currentFrame * 1280, 0, 1280, 720);
-        _spriteBatch.Draw(bgSprite, new Rectangle(0, 0, 1280, 720), sourceRect, Color.White);
+        _spriteBatch.Draw(bgSprite, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), sourceRect, Color.White);
 
         foreach (Tile tile in grid)
         {
