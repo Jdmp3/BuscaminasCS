@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BuscaminasCS")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b33e1f3a6b15ab1e8dd768e51f6e91612bcf93f8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+80bf66862f9036635a77baa85d818bc50b54c7f3")]
 [assembly: System.Reflection.AssemblyProductAttribute("BuscaminasCS")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BuscaminasCS")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
