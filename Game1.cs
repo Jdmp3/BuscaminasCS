@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Security.Principal;
 
 namespace BuscaminasCS;
 
@@ -14,10 +13,12 @@ public class Game1 : Game
 
     Texture2D pixel;
     Texture2D bgSprite;
+    SpriteFont FontBase;
     int totalFrames = 5;
     int currentFrame = 0;
     float frameTimer = 0f;
     float frameDuration = 0.6f;
+    Button ResetButton;
 
     int row = 10;
     int colm = 10;
@@ -84,10 +85,48 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+        FontBase = Content.Load<SpriteFont>("FontBase");
+
+        ResetButton = new Button
+        {
+            Bounds = new Rectangle(
+                GraphicsDevice.Viewport.Width - 160,
+                GraphicsDevice.Viewport.Height - 65,
+                140,
+                45
+            ),
+            text = "Reiniciar",
+            OnClick = ResetGame
+        };
+
         pixel = new Texture2D(GraphicsDevice, 1, 1);
         pixel.SetData(new[] {Color.White});
 
         bgSprite = Content.Load<Texture2D>("SpaceWallpaperSheet");
+    }
+
+
+
+    private void ResetGame()
+    {
+         for (int y = 0; y < row; y++)
+            for (int x = 0; x < colm; x++)
+                grid[y, x] = new Tile { Bounds = new Rectangle(offsetX + x * tileSize, offsetY + y * tileSize, tileSize, tileSize) };
+
+              int minesPlaced = 0;
+                  while (minesPlaced < 10)
+        {
+            int rx = random.Next(colm);
+            int ry = random.Next(row);
+            if (!grid[ry, rx].IsMine)
+            {
+                grid[ry, rx].IsMine = true;
+                minesPlaced++;
+            }
+        }
+        _pressedBounds = Rectangle.Empty;
+        _previousMouse = default;
+        _previousKeyboard = default;
     }
 
 
@@ -122,6 +161,7 @@ public class Game1 : Game
         MouseState mouse = Mouse.GetState();
 
 
+        ResetButton.Update(mouse, _previousMouse);
 
 
         if (mouse.LeftButton == ButtonState.Pressed && _previousMouse.LeftButton == ButtonState.Released)
@@ -217,6 +257,8 @@ public class Game1 : Game
                 Color.Magenta
             );
         }
+
+        ResetButton.Draw(_spriteBatch, pixel, FontBase);
 
         _spriteBatch.End();
 
