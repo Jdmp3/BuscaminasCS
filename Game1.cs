@@ -140,6 +140,14 @@ public class Game1 : Game
             grid[y, x].Bounds = new Rectangle(offsetX + x * tileSize, offsetY + y * tileSize, tileSize, tileSize);
             }
         }
+
+        ResetButton.Bounds = new Rectangle(
+            GraphicsDevice.Viewport.Width - 160,
+            GraphicsDevice.Viewport.Height - 65,
+            140,
+            45
+        );
+
     }
 
 

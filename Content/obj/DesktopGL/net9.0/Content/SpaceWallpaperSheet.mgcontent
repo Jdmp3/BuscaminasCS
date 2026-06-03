@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>C:/Users/josey/OneDrive/Imágenes/CosasProgramación/C Sharp/BuscaminasCS/Content/SpaceWallpaperSheet.png</SourceFile>
-  <SourceTime>2026-06-01T13:33:25.4740903-05:00</SourceTime>
-  <DestFile>C:/Users/josey/OneDrive/Imágenes/CosasProgramación/C Sharp/BuscaminasCS/Content/bin/DesktopGL/Content/SpaceWallpaperSheet.xnb</DestFile>
-  <DestTime>2026-06-01T14:17:29.4063182-05:00</DestTime>
+  <SourceFile>/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/Content/SpaceWallpaperSheet.png</SourceFile>
+  <SourceTime>2026-05-27T18:34:44.1787112-05:00</SourceTime>
+  <DestFile>/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/Content/bin/DesktopGL/Content/SpaceWallpaperSheet.xnb</DestFile>
+  <DestTime>2026-06-02T19:21:36.4002519-05:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2025-10-20T09:25:32-05:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
