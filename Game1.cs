@@ -49,6 +49,7 @@ public class Game1 : Game
     public class Tile()
     {
         public Rectangle Bounds;
+        public bool Flagged;
         public bool IsMine;
         public bool IsRevealed;
     }
@@ -172,6 +173,10 @@ public class Game1 : Game
         ResetButton.Update(mouse, _previousMouse);
 
 
+
+        //  Deteccion de Click Izquierdo Para Revelar
+
+
         if (mouse.LeftButton == ButtonState.Pressed && _previousMouse.LeftButton == ButtonState.Released)
         {
             int x = (mouse.X - offsetX) / tileSize;
@@ -196,9 +201,50 @@ public class Game1 : Game
             {
                 int x = (_pressedBounds.X - offsetX) / tileSize;
                 int y = (_pressedBounds.Y - offsetY) / tileSize;
-                grid[y, x].IsRevealed = true;
+                if(!grid[y, x].Flagged)
+                { 
+                     grid[y, x].IsRevealed = true;
+                }
             }
             _pressedBounds = Rectangle.Empty;
+        }
+
+
+        //Flaging si hay Click Derecho
+
+
+
+        if (mouse.RightButton == ButtonState.Pressed && _previousMouse.RightButton == ButtonState.Released)
+        {
+            int x = (mouse.X - offsetX) / tileSize;
+            int y = (mouse.Y - offsetY) / tileSize;
+            if (x >= 0 && x < colm && y >= 0 && y < row)
+            {
+                _pressedBounds = grid[y, x].Bounds;
+            }
+        }
+
+        if (_pressedBounds != Rectangle.Empty && mouse.RightButton == ButtonState.Pressed)
+        {
+            if (!_pressedBounds.Contains(mouse.X, mouse.Y))
+            {
+                _pressedBounds = Rectangle.Empty;
+            }
+        }
+
+
+        if (mouse.RightButton == ButtonState.Released && _previousMouse.RightButton == ButtonState.Pressed)
+        {
+            if(_pressedBounds != Rectangle.Empty && _pressedBounds.Contains(mouse.X, mouse.Y))
+            {
+                int x = (_pressedBounds.X - offsetX) / tileSize;
+                int y = (_pressedBounds.Y - offsetY) / tileSize;
+                if(!grid[y, x].IsRevealed)
+                { 
+                     grid[y, x].Flagged = !grid[y, x].Flagged;
+                }
+            }
+             _pressedBounds = Rectangle.Empty;
         }
 
         _previousMouse = mouse;
@@ -235,6 +281,14 @@ public class Game1 : Game
                 _spriteBatch.Draw(pixel, new Vector2(tile.Bounds.X + tile.Bounds.Width/ 2f, tile.Bounds.Y + tile.Bounds.Height/ 2f), null, Color.Black, MathHelper.ToRadians(45), new Vector2(0.5f, 0.5f), new Vector2(DetectorDiagonal, 4), SpriteEffects.None, 0f);
                 _spriteBatch.Draw(pixel, new Vector2(tile.Bounds.X + tile.Bounds.Width / 2f, tile.Bounds.Y + tile.Bounds.Height/ 2f), null, Color.Black, MathHelper.ToRadians(-45), new Vector2(0.5f, 0.5f), new Vector2(DetectorDiagonal, 4), SpriteEffects.None, 0f);
             }
+            else if (tile.Flagged)
+            {
+                _spriteBatch.Draw(pixel, tile.Bounds, Color.YellowGreen);
+
+                _spriteBatch.Draw(pixel, new Vector2(tile.Bounds.X + tile.Bounds.Width / 2f, tile.Bounds.Y + tile.Bounds.Height/ 2f), null, Color.White, MathHelper.ToRadians(20), new Vector2(0.5f, 0.5f), new Vector2(2, 2), SpriteEffects.None, 0f);
+            }
+
+
             else if (tile.IsRevealed)
             {
                 _spriteBatch.Draw(pixel, tile.Bounds, Color.LightGray);
