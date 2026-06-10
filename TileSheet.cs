@@ -63,8 +63,7 @@ public class TileSheet
     {
         if (tile.RevealTime >= RevealTotalDuration)
         {
-            tile.IsRevealing = false;
-            tile.IsRevealed = true;
+            tile.State = TileState.Revealed;
         }
     }
 
@@ -72,11 +71,10 @@ public class TileSheet
     {
         if (tile.FlagAnimTime >= FlagPlayDuration)
         {
-            tile.IsFlagAnimating = false;
-            if (tile.FlagAnimForward)
-                tile.Flagged = true;
-            else
-                tile.Flagged = false;
+            if (tile.State == TileState.Flagging)
+                tile.State = TileState.Flagged;
+            else if (tile.State == TileState.Unflagging)
+                tile.State = TileState.Hidden;
         }
     }
 
@@ -102,6 +100,12 @@ public class TileSheet
     public void DrawEmptyTile(SpriteBatch spriteBatch, Rectangle bounds)
     {
         var source = new Rectangle(0, 4 * frameSize, frameSize, frameSize);
+        spriteBatch.Draw(texture, bounds, source, Color.White);
+    }
+
+    public void DrawNumberTile(SpriteBatch spriteBatch, Rectangle bounds, int number)
+    {
+        var source = new Rectangle(number * frameSize, 4 * frameSize, frameSize, frameSize);
         spriteBatch.Draw(texture, bounds, source, Color.White);
     }
 

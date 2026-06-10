@@ -36,6 +36,8 @@ public class Game1 : Game
     Tile [,] grid;
     Random random = new();
 
+    bool _firstClick = true;
+
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -62,17 +64,8 @@ public class Game1 : Game
             for (int x = 0; x < colm; x++)
                 grid[y, x] = new Tile { Bounds = new Rectangle(offsetX + x * tileSize, offsetY + y * tileSize, tileSize, tileSize) };
 
-              int minesPlaced = 0;
-                  while (minesPlaced < 10)
-        {
-            int rx = random.Next(colm);
-            int ry = random.Next(row);
-            if (!grid[ry, rx].IsMine)
-            {
-                grid[ry, rx].IsMine = true;
-                minesPlaced++;
-            }
-        }
+        PlaceMines();
+        _firstClick = true;
 
         base.Initialize();
     }
@@ -110,20 +103,102 @@ public class Game1 : Game
             for (int x = 0; x < colm; x++)
                 grid[y, x] = new Tile { Bounds = new Rectangle(offsetX + x * tileSize, offsetY + y * tileSize, tileSize, tileSize) };
 
-              int minesPlaced = 0;
-                  while (minesPlaced < 10)
+        PlaceMines();
+        _firstClick = true;
+        _pressedBounds = Rectangle.Empty;
+        _previousMouse = default;
+        _previousKeyboard = default;
+    }
+
+    private void PlaceMines()
+    {
+        int[,] tempCount = new int[row, colm];
+        int minesPlaced = 0;
+
+        while (minesPlaced < 10)
         {
             int rx = random.Next(colm);
             int ry = random.Next(row);
             if (!grid[ry, rx].IsMine)
             {
-                grid[ry, rx].IsMine = true;
-                minesPlaced++;
+                bool canPlace = true;
+                for (int dy = -1; dy <= 1; dy++)
+                {
+                    for (int dx = -1; dx <= 1; dx++)
+                    {
+                        if (dy == 0 && dx == 0) continue;
+                        int ny = ry + dy, nx = rx + dx;
+                        if (ny >= 0 && ny < row && nx >= 0 && nx < colm)
+                        {
+                            if (tempCount[ny, nx] >= 6)
+                            {
+                                canPlace = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (!canPlace) break;
+                }
+
+                if (canPlace)
+                {
+                    grid[ry, rx].IsMine = true;
+                    for (int dy = -1; dy <= 1; dy++)
+                        for (int dx = -1; dx <= 1; dx++)
+                        {
+                            if (dy == 0 && dx == 0) continue;
+                            int ny = ry + dy, nx = rx + dx;
+                            if (ny >= 0 && ny < row && nx >= 0 && nx < colm)
+                                tempCount[ny, nx]++;
+                        }
+                    minesPlaced++;
+                }
             }
         }
-        _pressedBounds = Rectangle.Empty;
-        _previousMouse = default;
-        _previousKeyboard = default;
+
+        for (int y = 0; y < row; y++)
+            for (int x = 0; x < colm; x++)
+                grid[y, x].NeighborMineCount = tempCount[y, x];
+    }
+
+    private void RecalculateNeighborCounts()
+    {
+        for (int y = 0; y < row; y++)
+        {
+            for (int x = 0; x < colm; x++)
+            {
+                int count = 0;
+                for (int dy = -1; dy <= 1; dy++)
+                    for (int dx = -1; dx <= 1; dx++)
+                    {
+                        if (dy == 0 && dx == 0) continue;
+                        int ny = y + dy, nx = x + dx;
+                        if (ny >= 0 && ny < row && nx >= 0 && nx < colm && grid[ny, nx].IsMine)
+                            count++;
+                    }
+                grid[y, x].NeighborMineCount = count;
+            }
+        }
+    }
+
+    private void RevealTile(int y, int x)
+    {
+        if (y < 0 || y >= row || x < 0 || x >= colm) return;
+        var tile = grid[y, x];
+
+        if (tile.State != TileState.Hidden || tile.IsMine)
+            return;
+
+        tile.State = TileState.Revealing;
+        tile.RevealTime = 0f;
+
+        if (tile.NeighborMineCount == 0)
+        {
+            for (int dy = -1; dy <= 1; dy++)
+                for (int dx = -1; dx <= 1; dx++)
+                    if (dy != 0 || dx != 0)
+                        RevealTile(y + dy, x + dx);
+        }
     }
 
 
@@ -133,7 +208,7 @@ public class Game1 : Game
         offsetY = (GraphicsDevice.Viewport.Height - row * tileSize) / 2;
         for(int y = 0; y < row; y++)
         {
-            for(int x = 0; x < row; x++){
+            for(int x = 0; x < colm; x++){
             grid[y, x].Bounds = new Rectangle(offsetX + x * tileSize, offsetY + y * tileSize, tileSize, tileSize);
             }
         }
@@ -179,7 +254,8 @@ public class Game1 : Game
             int y = (mouse.Y - offsetY) / tileSize;
             if (x >= 0 && x < colm && y >= 0 && y < row)
             {
-                _pressedBounds = grid[y, x].Bounds;
+                if (grid[y, x].State == TileState.Hidden)
+                    _pressedBounds = grid[y, x].Bounds;
             }
         }
 
@@ -197,10 +273,34 @@ public class Game1 : Game
             {
                 int x = (_pressedBounds.X - offsetX) / tileSize;
                 int y = (_pressedBounds.Y - offsetY) / tileSize;
-                if(!grid[y, x].Flagged && !grid[y, x].IsFlagAnimating && !grid[y, x].IsRevealed && !grid[y, x].IsRevealing)
-                { 
-                     grid[y, x].IsRevealing = true;
-                     grid[y, x].RevealTime = 0f;
+                var tile = grid[y, x];
+
+                if (tile.State == TileState.Hidden)
+                {
+                    if (_firstClick && tile.IsMine)
+                    {
+                        tile.IsMine = false;
+                        int ny, nx;
+                        do {
+                            ny = random.Next(row);
+                            nx = random.Next(colm);
+                        } while (grid[ny, nx].IsMine || (ny == y && nx == x));
+                        grid[ny, nx].IsMine = true;
+                        RecalculateNeighborCounts();
+                        _firstClick = false;
+                    }
+                    else
+                    {
+                        _firstClick = false;
+                    }
+
+                    if (!tile.IsMine)
+                        RevealTile(y, x);
+                    else
+                    {
+                        tile.State = TileState.Revealing;
+                        tile.RevealTime = 0f;
+                    }
                 }
             }
             _pressedBounds = Rectangle.Empty;
@@ -237,11 +337,15 @@ public class Game1 : Game
                 int x = (_pressedBounds.X - offsetX) / tileSize;
                 int y = (_pressedBounds.Y - offsetY) / tileSize;
                 var tile = grid[y, x];
-                if(!tile.IsRevealed && !tile.IsRevealing && !tile.IsFlagAnimating)
-                { 
-                     tile.IsFlagAnimating = true;
-                     tile.FlagAnimForward = !tile.Flagged;
-                     tile.FlagAnimTime = 0f;
+                if (tile.State == TileState.Hidden)
+                {
+                    tile.State = TileState.Flagging;
+                    tile.FlagAnimTime = 0f;
+                }
+                else if (tile.State == TileState.Flagged)
+                {
+                    tile.State = TileState.Unflagging;
+                    tile.FlagAnimTime = 0f;
                 }
             }
              _pressedBounds = Rectangle.Empty;
@@ -258,13 +362,13 @@ public class Game1 : Game
 
         foreach (var tile in grid)
         {
-            if (tile.IsRevealing)
+            if (tile.State == TileState.Revealing)
             {
                 tile.RevealTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 tileSheet.UpdateReveal(tile);
             }
 
-            if (tile.IsFlagAnimating)
+            if (tile.State == TileState.Flagging || tile.State == TileState.Unflagging)
             {
                 tile.FlagAnimTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
                 tileSheet.UpdateFlagAnimation(tile);
@@ -289,27 +393,29 @@ public class Game1 : Game
 
         foreach (Tile tile in grid)
         {
-            if (tile.Flagged || tile.IsFlagAnimating)
+            if (tile.State == TileState.Flagged || tile.State == TileState.Flagging || tile.State == TileState.Unflagging)
             {
-                if (tile.IsFlagAnimating)
-                    tileSheet.DrawFlagTile(_spriteBatch, tile.Bounds, tile.FlagAnimTime, tile.FlagAnimForward);
-                else
+                if (tile.State == TileState.Flagged)
                     tileSheet.DrawFlagTile(_spriteBatch, tile.Bounds, float.MaxValue, true);
+                else
+                    tileSheet.DrawFlagTile(_spriteBatch, tile.Bounds, tile.FlagAnimTime, tile.State == TileState.Flagging);
                 continue;
             }
 
-            if (tile.IsRevealed || tile.IsRevealing)
+            if (tile.State == TileState.Revealed || tile.State == TileState.Revealing)
             {
                 if (tile.IsMine)
                     tileSheet.DrawMineTile(_spriteBatch, tile.Bounds);
-                else if (!tile.IsMine)
+                else if (tile.NeighborMineCount > 0)
+                    tileSheet.DrawNumberTile(_spriteBatch, tile.Bounds, tile.NeighborMineCount);
+                else
                     tileSheet.DrawEmptyTile(_spriteBatch, tile.Bounds);
             }
 
-            if (tile.IsRevealing)
+            if (tile.State == TileState.Revealing)
                 tileSheet.DrawRevealTile(_spriteBatch, tile.Bounds, tile.RevealTime, pixel);
 
-            if (!tile.IsRevealed && !tile.IsRevealing)
+            if (tile.State == TileState.Hidden)
                 tileSheet.DrawIdleTile(_spriteBatch, tile.Bounds, tile.Bounds == _pressedBounds);
         }
 
