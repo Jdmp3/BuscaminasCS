@@ -13,6 +13,7 @@ public class Game1 : Game
 
     Texture2D pixel;
     Texture2D bgSprite;
+    TileSheet tileSheet;
     SpriteFont FontBase;
     int totalFrames = 5;
     int currentFrame = 0;
@@ -22,7 +23,7 @@ public class Game1 : Game
 
     int row = 10;
     int colm = 10;
-    int tileSize = 40;
+    int tileSize = 45;
 
     int offsetX;
     int offsetY;
@@ -46,13 +47,7 @@ public class Game1 : Game
         Window.ClientSizeChanged += OnWindowSizeChanged;
     }
 
-    public class Tile()
-    {
-        public Rectangle Bounds;
-        public bool Flagged;
-        public bool IsMine;
-        public bool IsRevealed;
-    }
+
 
     protected override void Initialize()
     {
@@ -104,6 +99,7 @@ public class Game1 : Game
         pixel.SetData(new[] {Color.White});
 
         bgSprite = Content.Load<Texture2D>("SpaceWallpaperSheet");
+        tileSheet = new TileSheet(Content);
     }
 
 
@@ -201,9 +197,10 @@ public class Game1 : Game
             {
                 int x = (_pressedBounds.X - offsetX) / tileSize;
                 int y = (_pressedBounds.Y - offsetY) / tileSize;
-                if(!grid[y, x].Flagged)
+                if(!grid[y, x].Flagged && !grid[y, x].IsFlagAnimating && !grid[y, x].IsRevealed && !grid[y, x].IsRevealing)
                 { 
-                     grid[y, x].IsRevealed = true;
+                     grid[y, x].IsRevealing = true;
+                     grid[y, x].RevealTime = 0f;
                 }
             }
             _pressedBounds = Rectangle.Empty;
@@ -239,9 +236,12 @@ public class Game1 : Game
             {
                 int x = (_pressedBounds.X - offsetX) / tileSize;
                 int y = (_pressedBounds.Y - offsetY) / tileSize;
-                if(!grid[y, x].IsRevealed)
+                var tile = grid[y, x];
+                if(!tile.IsRevealed && !tile.IsRevealing && !tile.IsFlagAnimating)
                 { 
-                     grid[y, x].Flagged = !grid[y, x].Flagged;
+                     tile.IsFlagAnimating = true;
+                     tile.FlagAnimForward = !tile.Flagged;
+                     tile.FlagAnimTime = 0f;
                 }
             }
              _pressedBounds = Rectangle.Empty;
@@ -255,6 +255,23 @@ public class Game1 : Game
             currentFrame = (currentFrame + 1) % totalFrames;
             frameTimer -= frameDuration;
         }
+
+        foreach (var tile in grid)
+        {
+            if (tile.IsRevealing)
+            {
+                tile.RevealTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                tileSheet.UpdateReveal(tile);
+            }
+
+            if (tile.IsFlagAnimating)
+            {
+                tile.FlagAnimTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                tileSheet.UpdateFlagAnimation(tile);
+            }
+        }
+
+        tileSheet.Update(gameTime);
 
         _previousKeyboard = keyboard;
 
@@ -272,34 +289,28 @@ public class Game1 : Game
 
         foreach (Tile tile in grid)
         {
-            if (tile.IsRevealed && tile.IsMine)
+            if (tile.Flagged || tile.IsFlagAnimating)
             {
-                _spriteBatch.Draw(pixel, tile.Bounds, Color.Red);
-
-                float DetectorDiagonal = MathF.Sqrt(2) * (tile.Bounds.Width - 4 * 2);
-
-                _spriteBatch.Draw(pixel, new Vector2(tile.Bounds.X + tile.Bounds.Width/ 2f, tile.Bounds.Y + tile.Bounds.Height/ 2f), null, Color.Black, MathHelper.ToRadians(45), new Vector2(0.5f, 0.5f), new Vector2(DetectorDiagonal, 4), SpriteEffects.None, 0f);
-                _spriteBatch.Draw(pixel, new Vector2(tile.Bounds.X + tile.Bounds.Width / 2f, tile.Bounds.Y + tile.Bounds.Height/ 2f), null, Color.Black, MathHelper.ToRadians(-45), new Vector2(0.5f, 0.5f), new Vector2(DetectorDiagonal, 4), SpriteEffects.None, 0f);
-            }
-            else if (tile.Flagged)
-            {
-                _spriteBatch.Draw(pixel, tile.Bounds, Color.YellowGreen);
-
-                _spriteBatch.Draw(pixel, new Vector2(tile.Bounds.X + tile.Bounds.Width / 2f, tile.Bounds.Y + tile.Bounds.Height/ 2f), null, Color.White, MathHelper.ToRadians(20), new Vector2(0.5f, 0.5f), new Vector2(2, 2), SpriteEffects.None, 0f);
-            }
-
-
-            else if (tile.IsRevealed)
-            {
-                _spriteBatch.Draw(pixel, tile.Bounds, Color.LightGray);
-            }
-            else
-            {
-                if (tile.Bounds == _pressedBounds)
-                    _spriteBatch.Draw(pixel, tile.Bounds, Color.Gray);
+                if (tile.IsFlagAnimating)
+                    tileSheet.DrawFlagTile(_spriteBatch, tile.Bounds, tile.FlagAnimTime, tile.FlagAnimForward);
                 else
-                    _spriteBatch.Draw(pixel, tile.Bounds, Color.DarkGray);
+                    tileSheet.DrawFlagTile(_spriteBatch, tile.Bounds, float.MaxValue, true);
+                continue;
             }
+
+            if (tile.IsRevealed || tile.IsRevealing)
+            {
+                if (tile.IsMine)
+                    tileSheet.DrawMineTile(_spriteBatch, tile.Bounds);
+                else if (!tile.IsMine)
+                    tileSheet.DrawEmptyTile(_spriteBatch, tile.Bounds);
+            }
+
+            if (tile.IsRevealing)
+                tileSheet.DrawRevealTile(_spriteBatch, tile.Bounds, tile.RevealTime, pixel);
+
+            if (!tile.IsRevealed && !tile.IsRevealing)
+                tileSheet.DrawIdleTile(_spriteBatch, tile.Bounds, tile.Bounds == _pressedBounds);
         }
 
         for (int x = 0; x <= colm; x++)
@@ -307,7 +318,7 @@ public class Game1 : Game
             _spriteBatch.Draw(
                 pixel,
                 new Rectangle(offsetX + x * tileSize, offsetY, 2, row * tileSize),
-                Color.Magenta
+                Color.DimGray
             );
         }
 
@@ -316,7 +327,7 @@ public class Game1 : Game
             _spriteBatch.Draw(
                 pixel,
                 new Rectangle(offsetX, offsetY + y * tileSize, colm * tileSize, 2),
-                Color.Magenta
+                Color.DimGray
             );
         }
 
