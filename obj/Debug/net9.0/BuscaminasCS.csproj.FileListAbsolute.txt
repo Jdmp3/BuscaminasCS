@@ -75,3 +75,5 @@ C:/Users/josey/OneDrive/Imágenes/CosasProgramación/C Sharp/BuscaminasCS/bin/De
 /home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/bin/Debug/net9.0/Content/Font.xnb
 /home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/bin/Debug/net9.0/Content/FontBase.xnb
 /home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/bin/Debug/net9.0/Content/SheetTile.xnb
+/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/bin/Debug/net9.0/Content/astral-floar.ogg
+/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/bin/Debug/net9.0/Content/astral-floar.xnb

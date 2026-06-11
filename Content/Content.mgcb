@@ -13,6 +13,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin astral-floar.ogg
+/importer:OggImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:astral-floar.ogg
+
 #begin FontBase.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
