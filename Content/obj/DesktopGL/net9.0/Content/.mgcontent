@@ -4,12 +4,14 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
+    <File>/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/Content/astral-floar.ogg</File>
     <File>/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/Content/FontBase.spritefont</File>
     <File>/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/Content/SheetTile.png</File>
     <File>/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/Content/SpaceWallpaperSheet.png</File>
     <File>/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/Content/YahaUsagi.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

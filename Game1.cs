@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Media;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -15,6 +16,7 @@ public class Game1 : Game
     Texture2D bgSprite;
     TileSheet tileSheet;
     SpriteFont FontBase;
+    Song SpaceMusic;
     int totalFrames = 5;
     int currentFrame = 0;
     float frameTimer = 0f;
@@ -76,6 +78,8 @@ public class Game1 : Game
 
         FontBase = Content.Load<SpriteFont>("FontBase");
 
+        SpaceMusic = Content.Load<Song>("astral-floar");
+
         ResetButton = new Button
         {
             Bounds = new Rectangle(
@@ -93,6 +97,11 @@ public class Game1 : Game
 
         bgSprite = Content.Load<Texture2D>("SpaceWallpaperSheet");
         tileSheet = new TileSheet(Content);
+
+
+         MediaPlayer.Play(SpaceMusic);
+         MediaPlayer.Volume = 0.5f;
+         MediaPlayer.IsRepeating = true;
     }
 
 
@@ -417,24 +426,6 @@ public class Game1 : Game
 
             if (tile.State == TileState.Hidden)
                 tileSheet.DrawIdleTile(_spriteBatch, tile.Bounds, tile.Bounds == _pressedBounds);
-        }
-
-        for (int x = 0; x <= colm; x++)
-        {
-            _spriteBatch.Draw(
-                pixel,
-                new Rectangle(offsetX + x * tileSize, offsetY, 2, row * tileSize),
-                Color.DimGray
-            );
-        }
-
-        for (int y = 0; y <= row; y++)
-        {
-            _spriteBatch.Draw(
-                pixel,
-                new Rectangle(offsetX, offsetY + y * tileSize, colm * tileSize, 2),
-                Color.DimGray
-            );
         }
 
         ResetButton.Draw(_spriteBatch, pixel, FontBase);
