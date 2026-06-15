@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "4a5xcH4NoQs=",
+  "dgSpecHash": "AqymyZBxa8s=",
   "success": true,
   "projectFilePath": "/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/BuscaminasCS.csproj",
   "expectedPackageFiles": [
@@ -11,9 +11,9 @@
     "/home/yolanda/.nuget/packages/nvorbis/0.10.4/nvorbis.0.10.4.nupkg.sha512",
     "/home/yolanda/.nuget/packages/system.memory/4.5.3/system.memory.4.5.3.nupkg.sha512",
     "/home/yolanda/.nuget/packages/system.valuetuple/4.5.0/system.valuetuple.4.5.0.nupkg.sha512",
-    "/home/yolanda/.nuget/packages/microsoft.netcore.app.ref/9.0.16/microsoft.netcore.app.ref.9.0.16.nupkg.sha512",
-    "/home/yolanda/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.16/microsoft.aspnetcore.app.ref.9.0.16.nupkg.sha512",
-    "/home/yolanda/.nuget/packages/microsoft.netcore.app.host.linux-x64/9.0.16/microsoft.netcore.app.host.linux-x64.9.0.16.nupkg.sha512"
+    "/home/yolanda/.nuget/packages/microsoft.netcore.app.ref/9.0.17/microsoft.netcore.app.ref.9.0.17.nupkg.sha512",
+    "/home/yolanda/.nuget/packages/microsoft.aspnetcore.app.ref/9.0.17/microsoft.aspnetcore.app.ref.9.0.17.nupkg.sha512",
+    "/home/yolanda/.nuget/packages/microsoft.netcore.app.host.linux-x64/9.0.17/microsoft.netcore.app.host.linux-x64.9.0.17.nupkg.sha512"
   ],
   "logs": []
 }
