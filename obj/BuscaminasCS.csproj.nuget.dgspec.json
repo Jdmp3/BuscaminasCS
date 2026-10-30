@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/BuscaminasCS.csproj": {}
+    "/home/yolanda/Escritorio/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/BuscaminasCS.csproj": {}
   },
   "projects": {
-    "/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/BuscaminasCS.csproj": {
+    "/home/yolanda/Escritorio/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/BuscaminasCS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/BuscaminasCS.csproj",
+        "projectUniqueName": "/home/yolanda/Escritorio/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/BuscaminasCS.csproj",
         "projectName": "BuscaminasCS",
-        "projectPath": "/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/BuscaminasCS.csproj",
+        "projectPath": "/home/yolanda/Escritorio/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/BuscaminasCS.csproj",
         "packagesPath": "/home/yolanda/.nuget/packages/",
-        "outputPath": "/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/obj/",
+        "outputPath": "/home/yolanda/Escritorio/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/yolanda/.nuget/NuGet/NuGet.Config"
@@ -68,15 +68,15 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[9.0.16, 9.0.16]"
+              "version": "[9.0.22, 9.0.22]"
             },
             {
               "name": "Microsoft.NETCore.App.Host.linux-x64",
-              "version": "[9.0.16, 9.0.16]"
+              "version": "[9.0.22, 9.0.22]"
             },
             {
               "name": "Microsoft.NETCore.App.Ref",
-              "version": "[9.0.16, 9.0.16]"
+              "version": "[9.0.22, 9.0.22]"
             }
           ],
           "frameworkReferences": {
@@ -84,7 +84,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.108/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/10.0.114/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

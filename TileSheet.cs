@@ -129,7 +129,7 @@ public class TileSheet
         {
             float fadeT = (t - RevealPlayDuration) / revealFadeDuration;
             float alpha = MathHelper.Lerp(1f, 0f, fadeT);
-            spriteBatch.Draw(pixel, bounds, Color.Black * alpha);
+            spriteBatch.Draw(pixel, bounds, Color.White * alpha);
         }
     }
 }
