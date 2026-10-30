@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <SourceFile>/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/Content/FontBase.spritefont</SourceFile>
+  <SourceFile>/home/yolanda/Escritorio/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/Content/FontBase.spritefont</SourceFile>
   <SourceTime>2026-06-02T19:28:17.3341097-05:00</SourceTime>
-  <DestFile>/home/yolanda/Documentos/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/Content/bin/DesktopGL/Content/FontBase.xnb</DestFile>
-  <DestTime>2026-06-02T19:28:26.791776-05:00</DestTime>
+  <DestFile>/home/yolanda/Escritorio/Estudio Jose/PROYECTOS C#/BuscaminasCS/BuscaminasCS/Content/bin/DesktopGL/Content/FontBase.xnb</DestFile>
+  <DestTime>2026-10-30T17:49:42.3329287-05:00</DestTime>
   <Importer>FontDescriptionImporter</Importer>
   <ImporterTime>2025-10-20T09:25:32-05:00</ImporterTime>
   <Processor>FontDescriptionProcessor</Processor>
